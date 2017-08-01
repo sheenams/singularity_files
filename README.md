@@ -1,16 +1,21 @@
+Naming conventions:
+In order to be able to track versions and share images with multiple pipelines and groups, Singularity bootstrap files should include:
+ 1. name of main program installed (ie pindel requires samtools/htslib, but is called 'pindel')
+ 2. exact version of main program (ie pindel-0.2.5b8, not just pindel-0.2.5)
+
 To create a singularity image:
 
-singularity create <name-version>.img
+ singularity create <name-version>.img
 
 To bootstrap a Singularity file into an image:
 
-sudo singularity bootstrap <name-version>.img Singularity-<name-version>
+ sudo singularity bootstrap <name-version>.img Singularity-<name-version>
 
 To run singularity image:
 
-singularity run/exec <name-version>.img
+ singularity run/exec <name-version>.img
 
 To bind a directory to image:
 
-singularity run/exec --bind <abs/path> <name-version>.img
+ singularity run/exec --bind <abs/path> <name-version>.img
 
