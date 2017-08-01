@@ -1,0 +1,46 @@
+Bootstrap: docker
+From: ubuntu:14.04
+
+%setup
+cp /mnt/disk2/com/Genomes/src/annovar.2015-12-14.tar.gz /tmp
+
+%post 
+apt-get update && \
+    apt-get install -y --no-install-recommends \
+    make \
+    git \
+    ca-certificates \
+    build-essential \
+    perl
+
+apt-get install --yes \
+    python2.7 \
+    python2.7-dev \
+    gfortran \
+    python-setuptools
+ 
+version=v3.6
+cd /opt \
+    && git clone https://github.com/sheenams/munge.git \
+    && cd munge \
+    && git checkout $version \
+    && python setup.py install 
+
+
+# # To avoid annoying "perl: warning: Setting locale failed." errors
+locale-gen en_US.UTF-8
+LC_ALL=en_US.UTF-8
+LANG=en_US.UTF-8
+LANGUAGE=en_US.UTF-8
+
+cd /tmp/ && \
+    tar -xzf annovar.2015-12-14.tar.gz \
+    && cp annovar/*.pl /usr/bin/
+
+%runscript 
+if [ $# -eq 0 ]
+   then 
+   	exec munge -h 
+   else
+	exec munge $@
+fi

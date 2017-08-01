@@ -1,0 +1,17 @@
+Bootstrap: docker
+From: anapsix/alpine-java:jdk7
+
+%setup
+    cp /mnt/disk2/com/Genomes/src/BBMap_35.92.tar.gz /tmp 
+
+%post 
+
+cd /tmp/ && \
+   ls ./ && \
+   tar -xzf BBMap_35.92.tar.gz && \
+   cp -r bbmap/* /usr/bin \
+   && rm /tmp/BBMap_35.92.tar.gz
+
+%runscript 
+#Have to give $@ to include program options/requirements
+bbmerge.sh $@
