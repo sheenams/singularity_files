@@ -16,6 +16,6 @@ To run singularity image:
  singularity run/exec <name-version>.img
 
 To bind a directory to image:
-
- singularity run/exec --bind <abs/path> <name-version>.img
+# Can append :ro to make it read only 
+ singularity run/exec --bind <abs/path>/<path/in/container>:ro <name-version>.img
 
