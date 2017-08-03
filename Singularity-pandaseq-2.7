@@ -24,4 +24,4 @@ curl -SL https://github.com/neufeld/pandaseq/archive/v${version}.tar.gz \
     && ldconfig #To get around error that libpandaseq.so.[number]
 
 %runscript
-exec pandaseq $@
+exec pandaseq "$@"

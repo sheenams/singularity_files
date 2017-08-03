@@ -37,5 +37,5 @@ if [ $# -eq 0 ]
    then 
    	exec bedtools -h 
    else
-	exec bedtools $@
+	exec bedtools "$@"
 fi

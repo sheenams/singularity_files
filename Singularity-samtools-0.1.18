@@ -19,5 +19,5 @@ cd /tmp/ \
    && cp samtools-${samtools_version}/samtools /usr/local/bin 
 
 %runscript
-exec samtools $@
+exec samtools "$@"
  

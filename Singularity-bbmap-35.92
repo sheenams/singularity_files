@@ -13,5 +13,5 @@ cd /tmp/ && \
    && rm /tmp/BBMap_35.92.tar.gz
 
 %runscript 
-#Have to give $@ to include program options/requirements
-bbmerge.sh $@
+#Have to give "$@" to include program options/requirements
+bbmerge.sh "$@"

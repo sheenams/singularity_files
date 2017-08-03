@@ -22,7 +22,7 @@ cd /tmp/ \
     && rm -r /tmp/monoseq-2016-8-29.zip /tmp/MonoSeq-master
 
 %runscript 
-exec monoseq $@
+exec monoseq "$@"
 
 
 

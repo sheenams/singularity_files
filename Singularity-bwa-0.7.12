@@ -25,6 +25,6 @@ rm -rf /tmp/bwa \
     && apt-get remove --yes --purge build-essential gcc-multilib apt-utils zlib1g-dev
 
 %runscript 
-exec bwa $@
+exec bwa "$@"
 
 

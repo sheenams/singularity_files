@@ -29,5 +29,5 @@ if [ $# -eq 0 ]
    then 
      	echo "pindel or pindel2vcf, with options required"
 else
-	exec $@
+	exec "$@"
 fi

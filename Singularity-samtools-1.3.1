@@ -16,5 +16,5 @@ curl -SL https://github.com/samtools/samtools/releases/download/${samtools_versi
     && make install
 
 %runscript
-exec samtools $@
+exec samtools "$@"
  
