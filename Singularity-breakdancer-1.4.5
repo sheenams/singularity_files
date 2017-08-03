@@ -1,0 +1,44 @@
+Bootstrap: docker
+From: ubuntu:14.04
+
+%post 
+apt-get -y update
+apt-get -y install \
+    zlib1g-dev\
+    gcc \
+    build-essential \
+    cmake \
+    git \
+    perl \
+    libncurses-dev \
+    cpanminus \
+    libgd2-xpm-dev 
+
+cpanm Statistics \
+    GD \
+    GD::Graph::histogram
+
+version=1.4.5
+# # To avoid annoying "perl: warning: Setting locale failed." errors
+locale-gen en_US.UTF-8
+LC_ALL=en_US.UTF-8
+LANG=en_US.UTF-8
+LANGUAGE=en_US.UTF-8
+
+git clone --recursive https://github.com/genome/breakdancer.git /tmp/breakdancer-${version} \
+    && cd /tmp/breakdancer-${version} \
+    && git checkout v${version} \
+    && mkdir build \
+    && cd build \
+    && cmake .. -DCMAKE_BUILD_TYPE=$version -DCMAKE_INSTALL_PREFIX=/usr/local \
+    && make \
+    && make install \
+    && cp /tmp/breakdancer-${version}/perl/*.p[lm] /usr/local/bin 
+
+%runscript 
+if [ $# -eq 0 ]
+   then 
+   	echo "breakdancer-max or bam2cfg.pl with options required"
+   else
+	exec $@
+fi
