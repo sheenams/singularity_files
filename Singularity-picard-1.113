@@ -9,7 +9,7 @@ apk update \
 PICARD_INSTALL_DIR=/opt
 version=1.113
 
-wget http://sourceforge.net/projects/picard/files/picard-tools/${version}/picard-tools-${version}.zip && \
+wget -N http://sourceforge.net/projects/picard/files/picard-tools/${version}/picard-tools-${version}.zip && \
     unzip picard-tools-${version}.zip && \
     cp picard-tools-${version}/*jar $PICARD_INSTALL_DIR/ 
 
