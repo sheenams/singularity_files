@@ -1,0 +1,37 @@
+Bootstrap: docker
+From: ubuntu:14.04
+
+%setup
+version=v2.0.5
+cp /mnt/disk2/com/Genomes/src/CONTRA.${version}.tar.gz /tmp
+
+%post
+version=v2.0.5
+apt-get update && \
+    apt-get install -y --no-install-recommends \
+    make \
+    git \
+    ca-certificates \
+    build-essential \
+    zlib1g \
+    zlib1g-dev
+
+apt-get install --yes \
+    python2.7 \
+    python2.7-dev \
+    libpython2.7 \
+    libpython2.7-dev
+
+
+cd /tmp \
+    && tar -xzf CONTRA.${version}.tar.gz \
+    && cd CONTRA.${version} \
+    && tar -zxvf BEDTools.v2.11.2.tar.gz \
+    && make -C BEDTools-Version-2.11.2 \
+    && cp BEDTools-Version-2.11.2/bin/* /usr/bin \
+    && cd /tmp \
+    && cp CONTRA.${version}/*py /usr/bin \
+    && cp -r CONTRA.$version/scripts /usr/bin
+
+%runscript
+exec /usr/bin/python2.7 /usr/bin/contra.py "$@"
