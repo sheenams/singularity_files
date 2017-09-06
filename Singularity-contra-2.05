@@ -5,16 +5,25 @@ From: ubuntu:14.04
 version=v2.0.5
 cp /mnt/disk2/com/Genomes/src/CONTRA.${version}.tar.gz /tmp
 
+samtools_version=0.1.18
+cp /mnt/disk2/com/Genomes/src/samtools-${samtools_version}_labmed.tar.bz2 /tmp
+
 %post
 version=v2.0.5
-apt-get update && \
+samtools_version=0.1.18
+
+apt-get -y update && \
     apt-get install -y --no-install-recommends \
     make \
     git \
     ca-certificates \
     build-essential \
     zlib1g \
-    zlib1g-dev
+    zlib1g-dev \
+    gcc \
+    libncurses5-dev \
+    r-base-core \
+    g++
 
 apt-get install --yes \
     python2.7 \
@@ -22,6 +31,13 @@ apt-get install --yes \
     libpython2.7 \
     libpython2.7-dev
 
+ln -s /usr/bin/python2.7 /usr/bin/python
+
+#install required samtools, and its dependency htslib 
+cd /tmp/ \
+   && tar -xf samtools-${samtools_version}_labmed.tar.bz2 \
+   && make CFLAGS='-g -Wall -O2 -fPIC' -C samtools-${samtools_version} \
+   && cp samtools-${samtools_version}/samtools /usr/local/bin 
 
 cd /tmp \
     && tar -xzf CONTRA.${version}.tar.gz \
@@ -34,4 +50,4 @@ cd /tmp \
     && cp -r CONTRA.$version/scripts /usr/bin
 
 %runscript
-exec /usr/bin/python2.7 /usr/bin/contra.py "$@"
+exec contra.py "$@"
