@@ -1,0 +1,35 @@
+Bootstrap: docker
+From: ubuntu:14.04
+
+%setup 
+samtools_version=0.1.18
+cp /mnt/disk2/com/Genomes/src/samtools-${samtools_version}_labmed.tar.bz2 /tmp
+
+%post 
+samtools_version=0.1.18
+pindel_version=0.2.5a3
+
+#this will install all necessary packages and prepare the container
+apt-get -y update
+apt-get -y install make gcc zlib1g-dev libncurses5-dev curl g++
+
+#install required samtools, and its dependency htslib 
+cd /tmp/ \
+   && tar -xf samtools-${samtools_version}_labmed.tar.bz2 \
+   && make CFLAGS='-g -Wall -O2 -fPIC' -C samtools-${samtools_version} \
+   && cp samtools-${samtools_version}/samtools /usr/local/bin 
+    
+curl -SL  https://github.com/genome/pindel/archive/v${pindel_version}.tar.gz \
+    | tar -xzC /opt/ \
+    && cd /opt/pindel-${pindel_version} \
+    && ./INSTALL /opt/samtools-${samtools_version}/htslib-${htslib_version} \
+    && cp *pindel* /usr/bin 
+
+%runscript 
+#This program is called with 'pindel' and 'pindel2vcf'
+if [ $# -eq 0 ]
+   then 
+     	echo "pindel or pindel2vcf, with options required"
+else
+	exec "$@"
+fi
