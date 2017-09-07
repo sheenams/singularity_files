@@ -10,6 +10,8 @@ apt-get install -y --no-install-recommends \
     libpython2.7 \
     libpython2.7-dev
 
+ln -s /usr/bin/python2.7 /usr/bin/python
+
 version=2.01
 curl -SL http://csg.sph.umich.edu/chaolong/LASER/LASER-${version}.tar.gz \
     | tar -xzC /tmp \
@@ -21,7 +23,7 @@ if [ $# -eq 0 ]
    then 
    	echo "laser, pileup2seq.py  with options required"
    else 
-	exec /usr/bin/python2.7 /usr/bin/pileup2seq.py "$@"
+	exec "$@"
 fi
 
 
