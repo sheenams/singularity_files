@@ -1,5 +1,28 @@
 Bootstrap: docker
 From: python:2.7-slim
+#no special requirements for ngspipes
+
+#for munge:
+%post
+apt-get update && \
+    apt-get install -y --no-install-recommends \
+    perl \
+    locales
+
+# # To avoid annoying "perl: warning: Setting locale failed." errors
+locale-gen en_US.UTF-8
+LC_ALL=en_US.UTF-8
+LANG=en_US.UTF-8
+LANGUAGE=en_US.UTF-8
+
+pip install \
+    natsort>=5.0.2 \
+    numpy>=1.10.1 \
+    pandas>=0.17.1 \
+    suds==0.4 \
+    XlsxWriter==0.9.6 \
+    xlwt==0.7.5 \
+    xlrd==0.9.3
 
 %runscript
 exec python2.7 "$@"
