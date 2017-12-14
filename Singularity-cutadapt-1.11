@@ -7,17 +7,19 @@ version=1.11
 #The --no-cache option allows you to not cache the index locally, making image smaller
 apk add --update --no-cache ncurses python-dev py-setuptools \
     && apk add --virtual=deps --update --no-cache \
+    py-pip \
     cython-dev \
     musl-dev \
     curl \
     gcc 
 
-curl -SL https://github.com/marcelm/cutadapt/archive/v${version}.tar.gz \
-    | tar -xzC /tmp/ \
-    && cd /tmp/cutadapt-${version} \
-    && python setup.py install \
-    && python setup.py build_ext -i \
-    && rm -rf /var/cache/apk/* /tmp/* \
+mkdir -p /opt/cutadapt && \
+    pip install --install-option="--prefix=/opt/cutadapt" cutadapt==${version} && \
+    cp /opt/cutadapt/bin/cutadapt /usr/bin/cutadapt
+
+%environment
+PYTHONPATH=/opt/cutadapt/lib/python2.7/site-packages/
+export PYTHONPATH
 
 %runscript 
 exec cutadapt "$@"
