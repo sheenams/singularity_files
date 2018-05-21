@@ -23,7 +23,8 @@ apt-get -y update && \
     gcc \
     libncurses5-dev \
     r-base-core \
-    g++
+    g++ \
+    locales
 
 apt-get install --yes \
     python2.7 \
@@ -32,6 +33,9 @@ apt-get install --yes \
     libpython2.7-dev
 
 ln -s /usr/bin/python2.7 /usr/bin/python
+
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 #install required samtools, and its dependency htslib 
 cd /tmp/ \
@@ -48,6 +52,11 @@ cd /tmp \
     && cd /tmp \
     && cp CONTRA.${version}/*py /usr/bin \
     && cp -r CONTRA.$version/scripts /usr/bin
+
+%environment
+# # To avoid annoying "perl: warning: Setting locale failed." errors
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 %runscript
 exec contra.py "$@"
