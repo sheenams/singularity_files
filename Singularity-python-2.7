@@ -17,22 +17,24 @@ LC_ALL=en_US.UTF-8
 LANG=en_US.UTF-8
 LANGUAGE=en_US.UTF-8
 
-
-
+#required by lots of things
 pip install \
-    natsort>=5.0.2 \
     numpy>=1.10.1 \
-    pandas>=0.17.1 \
+    pandas>=0.17.1
+
+#required by munge
+pip install \
     suds==0.4 \
     XlsxWriter==0.9.6 \
     xlwt==0.7.5 \
     xlrd==0.9.3 \
-    pysam>=0.13.0 \
-    pyyaml>-3.12
+    natsort>=5.0.2 \
+    plotly
 
 #required by read_length_counts.py#
 pip install \
     matplotlib==2.0.2 \
     subprocess32==3.2.7
+
 %runscript
 exec python2.7 "$@"
