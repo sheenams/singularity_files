@@ -1,0 +1,18 @@
+Bootstrap: docker
+From: openjdk:7
+
+%post 
+# Must update ssl to use wget on alpine
+apk update \
+      &&   apk add ca-certificates wget \
+      &&   update-ca-certificates
+
+VARSCAN_INSTALL_DIR=/opt
+version=2.4.3
+
+wget -N https://github.com/dkoboldt/varscan/blob/master/VarScan.v${version}.jar && \
+   cp VarScan.v${version}.jar $VARSCAN_INSTALL_DIR/VarScan.jar
+
+%runscript 
+
+exec java -jar /opt/VarScan.jar "$@"
