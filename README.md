@@ -5,25 +5,17 @@ In order to be able to track versions and share images with multiple pipelines a
 
 To create a singularity image:
 
- singularity create (name-version).img
-
-If needed, you can change the size (pindel required this)
-
- singularity create --size 2048 (name-version).img
- 
-To bootstrap a Singularity file into an image:
-
- sudo singularity bootstrap (name-version).img Singularity-(name-version)
+ singularity build (name-version).simg Singularity-build-file
 
 To run singularity image:
 
- ./(name-version).img
+ ./(name-version).simg
  
  OR
  
- singularity run/exec (name-version).img
+ singularity run/exec (name-version).simg
 
 To bind a directory to image:
  Can append :ro to make it read only 
- singularity run/exec --bind (abs/path)/(path/in/container):ro (name-version).img
+ singularity run/exec --bind (abs/path)/(path/in/container):ro (name-version).simg
 
