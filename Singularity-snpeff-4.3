@@ -1,0 +1,23 @@
+Bootstrap: docker
+From: openjdk:8
+
+%post 
+SNPEFF_VERSION=4_3r
+SNPEFF_HOME=/opt/snpEff
+
+apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    ca-certificates \
+    libncurses5-dev \
+    libncursesw5-dev \
+    wget \
+    zlib1g-dev \
+  && rm -rf /var/lib/apt/lists/*
+
+wget --quiet -O snpEff_v${SNPEFF_VERSION}_core.zip \
+    http://downloads.sourceforge.net/project/snpeff/snpEff_v${SNPEFF_VERSION}_core.zip \
+  && unzip snpEff_v${SNPEFF_VERSION}_core.zip -d /opt/ \
+  && rm snpEff_v${SNPEFF_VERSION}_core.zip
+
+
+
