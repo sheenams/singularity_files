@@ -1,0 +1,1 @@
+sudo singularity build htstream-1.0 docker://quay.io/biocontainers/htstream:1.0.0--hf4b34a0_0
