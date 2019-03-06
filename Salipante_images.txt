@@ -1,0 +1,8 @@
+Several images for the Salipante lab were pulled from docker hub:
+
+singularity build htstream-1.0.simg docker://quay.io/biocontainers/htstream:1.0.0--hf4b34a0_0
+
+singularity build ea-utils-1.1.2.779.simg docker://quay.io/biocontainers/ea-utils:1.1.2.779--h9dd4a16_0
+
+
+
