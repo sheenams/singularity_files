@@ -1,0 +1,22 @@
+Bootstrap: docker
+From: ubuntu:16.04
+
+%post 
+bcftools_version=1.1
+
+#this will install all necessary packages and prepare the container
+apt-get -y update \
+  && apt-get -y install make gcc zlib1g-dev libncurses5-dev curl g++ libbz2-dev bzip2 liblzma-dev
+
+#liblzma-dev libbz2-1.0
+
+#install required samtools, and its dependency htslib 
+curl -SL https://github.com/samtools/bcftools/archive/${bcftools_version}.tar.gz \
+    | tar -xzC /opt/ \
+    && cd /opt/bcftools-${bcftools_version} \
+    && make \
+    && make install
+
+%runscript
+exec bcftools "$@"
+ 
