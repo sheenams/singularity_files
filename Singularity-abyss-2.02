@@ -13,7 +13,7 @@ wget --no-check-certificate https://github.com/bcgsc/abyss/releases/download/${a
     cd /opt/abyss-${abyss_version} && \
     ./autogen.sh && \
     mkdir build && cd build && \
-    ../configure --with-mpi=/usr/lib/openmpi && \
+    ../configure --enable-maxk=192 --with-mpi=/usr/lib/openmpi && \
     make install-strip && \
     rm -rf /tmp/abyss
 
