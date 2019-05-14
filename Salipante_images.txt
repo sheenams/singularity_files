@@ -4,5 +4,8 @@ singularity build htstream-1.0.simg docker://quay.io/biocontainers/htstream:1.0.
 
 singularity build ea-utils-1.1.2.779.simg docker://quay.io/biocontainers/ea-utils:1.1.2.779--h9dd4a16_0
 
+singularity build pear-0.9.6.3.simg docker://quay.io/biocontainers/pear:0.9.6--3
 
+singularity build pyani-0.2.7--py35h24bf2e0_1.simg docker://quay.io/biocontainers/pyani:0.2.7--py35h24bf2e0_1
 
+singularity build metaphlan2.simg  docker://biobakery/metaphlan2
