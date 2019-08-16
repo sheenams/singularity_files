@@ -9,3 +9,5 @@ singularity build pear-0.9.6.3.simg docker://quay.io/biocontainers/pear:0.9.6--3
 singularity build pyani-0.2.7--py35h24bf2e0_1.simg docker://quay.io/biocontainers/pyani:0.2.7--py35h24bf2e0_1
 
 singularity build metaphlan2.simg  docker://biobakery/metaphlan2
+
+singularity build beast-v1.8.3.simg docker://cswarth/docker-beast
