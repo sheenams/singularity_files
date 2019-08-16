@@ -1,0 +1,20 @@
+Bootstrap: docker
+From: anapsix/alpine-java:jdk8
+
+%post 
+apk update \
+    && apk add ca-certificates wget \
+    && update-ca-certificates
+
+version=2.20.5
+
+cd /opt && \
+   wget -N https://github.com/broadinstitute/picard/releases/download/${version}/picard.jar 
+
+%runscript
+if [ "$#" -eq 0 ]
+   then 
+   	exec java -jar /opt/picard.jar
+   else
+	exec "$@"	
+fi
