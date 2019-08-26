@@ -1,0 +1,11 @@
+Bootstrap: docker
+From: python:2.7-slim
+
+%post
+pip install monoseq==1.2.1
+
+%runscript 
+exec monoseq "$@"
+
+
+
