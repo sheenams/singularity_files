@@ -1,0 +1,18 @@
+Bootstrap: docker
+From: ubuntu:18.04
+
+%post
+version=2.5
+apt-get --fix-missing -qq update && apt-get -y upgrade && \
+	apt-get install -y python3-pip python3-dev build-essential
+
+pip3 install --upgrade pip==9.0.1 && \
+	pip3 install --upgrade virtualenv
+
+mkdir -p /opt/cutadapt && \
+    pip3 install --upgrade --install-option="--prefix=/opt/cutadapt" cutadapt==${version} && \
+    cp /opt/cutadapt/bin/cutadapt /usr/bin/cutadapt
+
+%runscript 
+exec cutadapt "$@"
+
