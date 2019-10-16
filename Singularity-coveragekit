@@ -1,0 +1,42 @@
+Bootstrap: docker
+From: ubuntu:16.04
+
+%post
+
+apt-get update && \
+    apt-get install -y --no-install-recommends \
+    make \
+    git \
+    ca-certificates \
+    build-essential \
+    zlib1g \
+    zlib1g-dev \
+    libbz2-dev \
+    liblzma-dev \
+    libcurl4-openssl-dev
+
+apt-get install --yes \
+    python2.7 \
+    python2.7-dev \
+    libpython2.7 \
+    libpython2.7-dev \
+    python-setuptools \
+    python-pip
+
+#pip install -U pip
+
+pip install pysam>=0.8.4 pytest==2.7.2
+
+cd /opt \
+   && git clone https://github.com/sheenams/coveragekit.git \
+   && cd coveragekit \
+   && python setup.py install
+
+%runscript
+if [ $# -eq 0 ]
+   then
+        exec python /opt/coveragekit/coveragekit.py -h
+   else
+        exec python /opt/coveragekit/coveragekit.py "$@"
+fi	
+
