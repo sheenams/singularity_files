@@ -1,0 +1,78 @@
+bootstrap: docker
+From: bioperl/bioperl:release-1-6-924 #ubuntu:14.04
+
+
+%post 
+apt-get update && \
+apt-get install -y --no-install-recommends \
+    perl \
+    wget \
+    unzip \
+    make \
+    gcc \
+    libc6-dev \
+    libgd2-xpm-dev \
+    libpng12-dev \
+    zlib1g-dev \
+    libncurses5-dev \
+    curl \
+    g++ \
+    cpanminus \
+    ca-certificates
+
+# To avoid annoying "perl: warning: Setting locale failed." errors
+locale-gen en_US.UTF-8
+LC_ALL=en_US.UTF-8
+LANG=en_US.UTF-8
+LANGUAGE=en_US.UTF-8
+
+export PERL5LIB=/usr/local/bin:/usr/local/lib:/usr/local/lib/perl5
+
+#Samtools is required for Bio::DB::Sam, which is required for BioPerl
+curl -SL http://sourceforge.net/projects/samtools/files/samtools/0.1.18/samtools-0.1.18.tar.bz2 \
+    | tar -xjC /tmp \
+    && cd /tmp/samtools-0.1.18 \
+    && make CFLAGS=-fPIC \
+    && export SAMTOOLS=/tmp/samtools-0.1.18 \
+    && cpanm --force Bio::DB::Sam
+
+blat_version=35
+CAP3_VERSION=10/15/07
+
+cd /opt \
+    && wget -N http://hgwdev.cse.ucsc.edu/~kent/src/blatSrc${blat_version}.zip \
+    && unzip -n blatSrc${blat_version}.zip \
+    && export MACHTYPE=x86_64 \
+    && export HOME=/opt/ \
+    && mkdir -p $HOME/bin/x86_64 \
+    && make -C /opt/blatSrc
+
+cd /tmp \
+    && wget -N http://seq.cs.iastate.edu/CAP3/cap3.linux.x86_64.tar \
+    && tar -xvf cap3.linux.x86_64.tar \
+    && cp CAP3/cap3 /usr/local/bin \
+    && cp CAP3/formcon /usr/local/bin
+
+cd /tmp \
+    && mkdir -p CREST \
+    && cd CREST \
+    && wget -N ftp://ftp.stjude.org/pub/software/CREST/CREST.tgz \
+    && tar -xzf CREST.tgz \
+    && cp /tmp/CREST/*.pl /usr/local/bin \
+    && cp /tmp/CREST/*.pm /usr/local/lib \
+    && cp -r /tmp/CREST/Tree/ /usr/local/lib \
+
+%environment
+
+export MACHTYPE=x86_64
+export PATH=$PATH:/opt/bin/x86_64
+export PERL5LIB=/usr/local/bin:/usr/local/lib:/usr/local/lib/perl5
+
+%runscript 
+if [ $# -eq 0 ]
+   then 
+   	echo "cap3, gfServer, CREST.pl with options required"
+   else
+	exec "$@"
+fi
+

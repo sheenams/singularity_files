@@ -1,0 +1,22 @@
+Bootstrap: docker
+From: anapsix/alpine-java:jdk7
+
+%post 
+apk update \
+    && apk add ca-certificates wget \
+    && update-ca-certificates
+
+PICARD_INSTALL_DIR=/opt
+version=1.113
+
+wget -N http://sourceforge.net/projects/picard/files/picard-tools/${version}/picard-tools-${version}.zip && \
+    unzip picard-tools-${version}.zip && \
+    cp picard-tools-${version}/*jar $PICARD_INSTALL_DIR/ 
+
+%runscript 
+if [ $# -eq 0 ]
+  then
+      exec java -jar /opt/CalculateHsMetrics.jar
+  else
+      exec java -jar "$@"
+fi

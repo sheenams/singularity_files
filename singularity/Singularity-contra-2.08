@@ -1,0 +1,59 @@
+Bootstrap: docker
+From: ubuntu:14.04
+
+%setup
+samtools_version=0.1.18
+cp /mnt/disk2/com/Genomes/src/samtools-${samtools_version}_labmed.tar.bz2 /tmp
+
+%post
+version=v2.0.8
+samtools_version=0.1.18
+
+apt-get -y update && \
+    apt-get install -y --no-install-recommends \
+    make \
+    curl \
+    gcc \
+    libncurses5-dev \
+    ca-certificates \
+    build-essential \
+    zlib1g \
+    zlib1g-dev \
+    r-base-core \
+    g++ \
+    locales
+
+apt-get install --yes \
+    python2.7 \
+    python2.7-dev \
+    libpython2.7 \
+    libpython2.7-dev
+
+ln -s /usr/bin/python2.7 /usr/bin/python
+
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+curl -SL https://sourceforge.net/projects/contra-cnv/files/CONTRA.V2.0/CONTRA.${version}.tar.gz \
+    | tar -xzC /tmp/ \
+    && cd /tmp/CONTRA.${version} \
+    && tar -zxvf BEDTools.v2.11.2.tar.gz \
+    && make -C BEDTools-Version-2.11.2 \
+    && cp BEDTools-Version-2.11.2/bin/* /usr/bin \
+    && cd /tmp \
+    && cp CONTRA.${version}/*py /usr/bin \
+    && cp -r CONTRA.$version/scripts /usr/bin
+
+#install required samtools, and its dependency htslib 
+cd /tmp/ \
+   && tar -xf samtools-${samtools_version}_labmed.tar.bz2 \
+   && make CFLAGS='-g -Wall -O2 -fPIC' -C samtools-${samtools_version} \
+   && cp samtools-${samtools_version}/samtools /usr/local/bin 
+
+%environment
+# # To avoid annoying "perl: warning: Setting locale failed." errors
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+%runscript
+exec contra.py "$@"

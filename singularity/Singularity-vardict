@@ -1,0 +1,21 @@
+Bootstrap: docker
+From: openjdk:8
+
+%post
+apt-get update \
+    && apt-get install -y ca-certificates git r-base 
+# R R-dev R-doc 
+    # libcurl4-gnutls-dev \
+    # libgnutls-dev \
+
+version=1.5.1
+git clone --recursive https://github.com/AstraZeneca-NGS/VarDictJava.git /opt/vardict-${version} \
+   && cd /opt/vardict-${version} \
+   && export TERM=xterm \
+   && ./gradlew clean installApp \
+   && ln -s /opt/vardict-${version}/build/install/VarDict/bin/VarDict /usr/local/bin \
+   && ln -s /opt/vardict-${version}/VarDict/*.R /usr/local/bin \
+   && ln -s /opt/vardict-${version}/VarDict/*.pl /usr/local/bin 
+
+ 
+

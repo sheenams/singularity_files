@@ -1,0 +1,28 @@
+1. tag image (requires image to be built on server, can see with `docker images`):
+docker tag cutadapt-1.11 sheenamt/cutadapt-1.11
+
+2. push image to docker hub (currently my images are public):
+docker push sheenamt/cutadapt-1.11
+
+3. create singularity image on local drive
+singularity create cutadapt-1.11.img
+
+4. import docker image to singularity:
+singularity import cutadapt-1.11.img docker://sheenamt/cutadapt-1.11
+
+5. run:
+singularity exec cutadapt-1.11.img cutadapt
+OR
+singularity run cutadapt-1.11.img 
+
+
+ OR 
+singularity run samtools-1.3.1.img 
+singularity run samtools-1.3.1.img view
+singularity exec samtools-1.3.1.img samtools
+
+NOT: 
+singularity run samtools-1.3.1.img samtools
+singularity exec samtools-1.3.1.img 
+singularity exec samtools-1.3.1.img view
+

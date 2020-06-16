@@ -1,0 +1,36 @@
+Bootstrap: docker
+From: ubuntu:14.04
+
+%post 
+
+apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc-multilib \
+    apt-utils \
+    zlib1g-dev \
+    ca-certificates \
+    unzip \
+    wget \
+    make
+
+apt-get install --yes \
+    python2.7 \
+    python2.7-dev \
+    libpython2.7 \
+    libpython2.7-dev
+
+ln -s /usr/bin/python2.7 /usr/bin/python
+
+version=1.1.2
+cd /opt &&\
+   wget -N http:\//sourceforge.net/projects/bowtie-bio/files/bowtie/${version}/bowtie-${version}-linux-x86_64.zip \
+   && unzip bowtie-${version}-linux-x86_64.zip \
+   && cd bowtie-${version} \
+   && cp $(find . -type f -perm -755)  /usr/bin \
+   && cp -r scripts/ /usr/bin \
+
+%runscript 
+exec bowtie "$@"
+
+

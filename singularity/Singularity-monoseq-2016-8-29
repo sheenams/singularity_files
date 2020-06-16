@@ -1,0 +1,28 @@
+Bootstrap: docker
+From: ubuntu:14.04
+
+#Monoseq is an un-versioned, rarely touched piece of software. Date is from last commit date of package we're using
+%setup
+cp /mnt/disk2/com/Genomes/src/monoseq-2016-8-29.zip /tmp
+
+%post 
+
+apt-get update && \
+    apt-get install -y \
+    libxml2-dev \
+    make \
+    unzip \
+    gcc
+
+cd /tmp/ \
+    && unzip monoseq-2016-8-29.zip \
+    && cd MonoSeq-master \
+    && make \
+    && cp monoseq /usr/bin \
+    && rm -r /tmp/monoseq-2016-8-29.zip /tmp/MonoSeq-master
+
+%runscript 
+exec monoseq "$@"
+
+
+

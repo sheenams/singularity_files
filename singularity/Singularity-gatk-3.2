@@ -1,0 +1,17 @@
+Bootstrap: docker
+From: openjdk:7
+
+%setup
+cp /mnt/disk10/users/sheenams/mydockerbuild/genetics-docker-images/gatk-3.2/GenomeAnalysisTK-3.2-2.tar.bz2 /tmp
+
+%post 
+
+#Setup ENV variables
+cd /tmp/ && \
+    tar -jxf GenomeAnalysisTK-3.2-2.tar.bz2 && \
+    cp GenomeAnalysisTK.jar /opt/
+
+%runscript 
+
+#Have to give $@ to include program options/requirements
+exec java -jar /opt/GenomeAnalysisTK.jar $@

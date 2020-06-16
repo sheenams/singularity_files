@@ -1,0 +1,81 @@
+bootstrap: docker
+From: ubuntu:14.04
+
+%setup
+factera_version=1.4.4
+cp /mnt/disk2/com/Genomes/src/factera-v${factera_version}.zip /tmp/
+
+%post 
+samtools_version=1.8
+factera_version=1.4.4
+
+apt-get update && \
+apt-get install -y --no-install-recommends \
+    cpanminus \
+    unzip \
+    wget \
+    make \
+    gcc \
+    zlib1g-dev \
+    libncurses5-dev \
+    curl \
+    g++ \
+    liblzma-dev \
+    libbz2-1.0 \
+    perl \
+    locales \
+    libbz2-dev \
+    ca-certificates 
+#    python-dev \
+# libz       (required)
+#     libbz2     (required, unless configured with --disable-bz2)
+#     liblzma
+#     libcurl
+#     libcrypto
+
+# Perl 5, with the following external dependency: Statistics::Descriptive.
+# To install Statistics::Descriptive from CPAN, issue the following command:
+# Other Perl dependencies are included in the Perl 5 Core Modules and should already be installed: IPC::Open3, List::Util, File::Spec, Symbol, Getopt::Std, File::Basename.
+
+cpanm Statistics::Descriptive
+
+# # To avoid annoying "perl: warning: Setting locale failed." errors
+locale-gen en_US.UTF-8
+LC_ALL=en_US.UTF-8
+LANG=en_US.UTF-8
+LANGUAGE=en_US.UTF-8
+
+# twoBitToFa
+# Find and download executable from the appropriate system folder, then copy/link/move to PATH (i.e., /usr/bin).
+cd /opt/ &&
+   wget -N http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/twoBitToFa \
+   && cp twoBitToFa /usr/bin \
+   && chmod 755 /usr/bin/twoBitToFa 
+
+# hg19.2bit to run FACTERA on the hg19 human genome.
+# Note that hg38.2bit is now available. To use another reference genome, make sure that input BED coordinates are consistent (the exons.bed file provided here is currently hg19 only).
+
+# blast+
+# After downloading, find blastn and makeblastdb in ncbi-blast-version/bin and copy/link/move to PATH (i.e., /usr/bin).
+curl -SL ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.7.1+-x64-linux.tar.gz \
+    | tar -xzC /opt/ \
+    && cp /opt/ncbi-blast-2.7.1+/bin/blastn /usr/bin \
+    && cp /opt/ncbi-blast-2.7.1+/bin/makeblastdb /usr/bin 
+
+
+# SAMtools
+# After downloading, find samtools and copy/link/move to PATH (i.e., /usr/bin).
+curl -SL https://github.com/samtools/samtools/releases/download/${samtools_version}/samtools-${samtools_version}.tar.bz2 \
+    | tar -xjC /opt/ \
+    && cd /opt/samtools-${samtools_version} \
+    && ./configure --prefix=/usr/local/ \
+    && make \
+    && make install 
+
+#Factera
+
+cd /tmp/ \
+   && unzip -o factera-v${factera_version}.zip -d /usr/local/bin 
+
+
+
